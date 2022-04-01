@@ -57,5 +57,4 @@ class data_ingest:
             data_customer.to_sql('Customer', conn, if_exists='append', index=False)
             data_fact.to_sql('fact', conn, if_exists='append', index=False)
         except Exception as e:
-            print("error")
             raise (str(e))
