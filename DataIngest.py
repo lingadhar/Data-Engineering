@@ -37,11 +37,10 @@ class data_ingest:
     # Creation of dataframes from the csv data file
     def data_ingest(self):
         data = self.cust_prod_id_gen()
-        data_PO = data[['OrderNumber','Product_id','ProductQuantity']]
         data_product = data[['Product_id','ProductName','ProductType','UnitPrice']]
         data_Invoice = data[['PaymentBillingCode','PaymentDate','PaymentType','Currency']]
         data_customer = data[['Cust_id','ClientName','DeliveryAddress','DeliveryCity','DeliveryPostcode','DeliveryCountry','DeliveryContactNumber']]
-        data_fact = data[['Cust_id','OrderNumber','Product_id','PaymentBillingCode','ProductQuantity','TotalPrice']]
+        data_PO = data[['OrderNumber','Cust_id','Product_id','PaymentBillingCode','ProductQuantity','TotalPrice']]
 
         # Dropping duplicates from the required dataframes
         data_customer = data_customer.drop_duplicates()
@@ -51,10 +50,9 @@ class data_ingest:
         # Copy the dataframes to SQLite tables
         try:
             conn = sqlite3.connect(self._target)
-            data_PO.to_sql('Purchase_Order', conn, if_exists='append', index=False)
             data_product.to_sql('Product', conn, if_exists='append', index=False)
             data_Invoice.to_sql('Invoice', conn, if_exists='append', index=False)
             data_customer.to_sql('Customer', conn, if_exists='append', index=False)
-            data_fact.to_sql('fact', conn, if_exists='append', index=False)
+            data_PO.to_sql('Purchase_Order', conn, if_exists='append', index=False)
         except Exception as e:
             raise (str(e))

@@ -41,12 +41,6 @@ def main():
     conn = create_connection(database)
 
     # create tables
-    sql_create_Purchase_Order = """ CREATE TABLE IF NOT EXISTS Purchase_Order (
-                                        OrderNumber varchar(50) PRIMARY KEY,
-                                        Product_id varchar(50) NOT NULL,
-                                        ProductQuantity int NOT NULL,
-                                        FOREIGN KEY (Product_id) REFERENCES Product (Product_id)
-                                    ); """
     sql_create_Invoice = """CREATE TABLE IF NOT EXISTS Invoice (
                                     PaymentBillingCode varchar(50) PRIMARY KEY,
                                     PaymentDate date NOT NULL,
@@ -71,9 +65,9 @@ def main():
                                     DeliveryContactNumber text
                                 );"""
     
-    sql_create_fact = """CREATE TABLE IF NOT EXISTS fact (
+    sql_create_Purchase_Order = """CREATE TABLE IF NOT EXISTS Purchase_Order (
+                                    OrderNumber varchar(50) PRIMARY KEY,
                                     Cust_id varchar(50),
-                                    OrderNumber varchar(50),
                                     Product_id varchar(50),
                                     PaymentBillingCode varchar(50),
                                     ProductQuantity int,
@@ -85,9 +79,6 @@ def main():
                                 );"""
 
     if conn is not None:
-        # create Purchase_Order table
-        create_table(conn, sql_create_Purchase_Order)
-
         # create Invoice table
         create_table(conn, sql_create_Invoice)
         
@@ -96,9 +87,10 @@ def main():
         
         # create Customer table
         create_table(conn, sql_create_Customer)
-        
-        # create Fact table
-        create_table(conn, sql_create_fact)
+
+        # create Purchase_Order table
+        create_table(conn, sql_create_Purchase_Order)
+
         
     else:
         print("Error! cannot create the database connection.")
